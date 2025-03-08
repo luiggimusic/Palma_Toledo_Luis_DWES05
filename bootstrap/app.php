@@ -11,7 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->validateCsrfTokens(except: [
+            'http://localhost/Palma_Toledo_Luis_DWES05/public/*'
+            // 'stripe/*',
+            // 'http://example.com/foo/bar',
+            // 'http://example.com/foo/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
