@@ -12,12 +12,17 @@ class User extends Model
     // Especificar el nombre de la tabla
     protected $table = 'users';
 
-    // Especificar la clave primaria si es diferente de 'id'
+    // Especificar la clave primaria'
     protected $primaryKey = 'dni';
 
-    // Desactivar los timestamps si no los estás utilizando
+    // Desactivar los timestamps si no se usa
     public $timestamps = false;
 
     // Especificar qué atributos son asignables masivamente
     protected $fillable = ['name', 'surname', 'dni', 'dateOfBirth', 'departmentId'];
+
+    // Como no uso el campo 'id', lo desactivo
+    public $incrementing = false;   // Esto indica que no uso un campo autoincrementable. He tenido que hacer esto pues 
+                                    //como había definido el dni como primary key, en la respuesta del JSON me mostraba el id en lugar del dni; 
+                                    //sin embargo en la base de datos lo hacía bien
 }
