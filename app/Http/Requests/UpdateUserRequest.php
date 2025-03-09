@@ -5,10 +5,12 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ValidDNI;
 
-
-class StoreUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
-    public function authorize()
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
         return true;
     }
@@ -25,7 +27,7 @@ class StoreUserRequest extends FormRequest
         // Convierte el DNI a mayúscula antes de la validación
         if ($this->has('dni')) {
             $this->merge([
-                'dni' => strtoupper($this->dni) 
+                'dni' => strtoupper($this->dni)
             ]);
         }
     }
@@ -35,9 +37,9 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required',
             'surname' => 'required',
-            'dni' => ['required',new ValidDNI(),'unique:users,dni'],
+            'dni' => ['required', 'string',new ValidDNI()],
             'dateOfBirth' => 'required|date',
-            'departmentId' => ['required','string','exists:departments,departmentId']
+            'departmentId' => ['required', 'string', 'exists:departments,departmentId']
         ];
     }
 
@@ -47,7 +49,6 @@ class StoreUserRequest extends FormRequest
             'name.required' => '⚠️ El nombre es obligatorio.',
             'surname.required' => '⚠️ El apellido es obligatorio.',
             'dni.required' => '⚠️ El DNI es obligatorio.',
-            'dni.unique' => '⚠️ El DNI ya está registrado.',
             'dateOfBirth.required' => '⚠️ La fecha de nacimiento es obligatoria.',
             'dateOfBirth.date_format' => '⚠️ La fecha debe estar en formato dd/mm/yyyy.',
             'dateOfBirth.date' => '⚠️ La fecha de nacimiento debe ser una fecha válida.',
