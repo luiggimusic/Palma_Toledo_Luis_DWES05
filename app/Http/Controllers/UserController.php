@@ -67,8 +67,10 @@ class UserController extends Controller
         ]);
     }
 
-    function updateUser(UpdateUserRequest $request, $dni)
+    function updateUser(UpdateUserRequest $request)
     {
+        $dni=$request->input("dni");
+
         // Busca el usuario por DNI
         $user = User::where('dni', $dni)->first();
 
@@ -91,8 +93,10 @@ class UserController extends Controller
         ]);
     }
 
-    function deleteUser(Request $request, $dni)
+    function deleteUser(Request $request)
     {
+        $dni=$request->input("dni");
+
         // Busca el usuario por DNI
         $user = User::where('dni', $dni)->first();
 

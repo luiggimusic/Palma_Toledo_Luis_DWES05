@@ -2,24 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductCategory extends Model
+class Department extends Model
 {
-    use HasFactory;
-
     // Especifico el nombre de la tabla
-    protected $table = 'productcategories';
+    protected $table = 'departments';
 
     // Especifico la clave primaria'
-    protected $primaryKey = 'productCategoryId';
+    protected $primaryKey = 'departmentId';
 
     // Desactivo los timestamps si no se usa
     public $timestamps = false;
 
     // Especifico qué atributos son asignables masivamente
-    protected $fillable = ['productCategoryId', 'productCategoryName'];
+    protected $fillable = ['departmentId', 'departmentName'];
 
     // Como no uso el campo 'id', lo desactivo
     public $incrementing = false;   // Esto indica que no uso un campo autoincrementable.
@@ -27,18 +24,18 @@ class ProductCategory extends Model
 
     public function getRouteKeyName()
     {
-        return 'productCategoryId';  // Indica que Laravel debe por qué campo buscar
+        return 'departmentId';  // Indica que Laravel debe por qué campo buscar
     }
     
     // Mutador para convertir a mayúsculas
-    public function setProductCategoryIdAttribute($value)
+    public function setDepartmentIdAttribute($value)
     {
-        $this->attributes['productCategoryId'] = strtoupper($value);
+        $this->attributes['departmentId'] = strtoupper($value);
     }
 
     // Mutador para capitalizar el nombre
-    public function setProductCategoryNameAttribute($value)
+    public function setDepartmentNameAttribute($value)
     {
-        $this->attributes['productCategoryName'] = ucwords(strtolower($value));
+        $this->attributes['departmentName'] = ucwords(strtolower($value));
     }
 }

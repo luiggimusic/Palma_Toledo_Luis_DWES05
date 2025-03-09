@@ -10,7 +10,8 @@ use App\Http\Requests\UpdateProductCategoryRequest;
 
 class ProductCategoryController extends Controller
 {
-    function getAllProductCategories() {
+    function getAllProductCategories()
+    {
         $productCategories = ProductCategory::all();
 
         if ($productCategories->isEmpty()) {
@@ -29,7 +30,10 @@ class ProductCategoryController extends Controller
         ]);
     }
 
-    function getProductCategoryById(Request $request, $id) {
+    function getProductCategoryById(Request $request)
+    {
+        $id = $request->input('productCategoryId');
+
         // Busca por id
         $productCategory = ProductCategory::where('productCategoryId', $id)->first();
 
@@ -47,10 +51,11 @@ class ProductCategoryController extends Controller
             'code' => 200,
             'message' => '✅ Datos cargados correctamente',
             'data' => $productCategory
-        ]);        
+        ]);
     }
 
-    function createProductCategory(StoreProductCategoryRequest $request) {
+    function createProductCategory(StoreProductCategoryRequest $request)
+    {
         $productCategory = ProductCategory::create($request->validated());
 
         return response()->json([
@@ -61,7 +66,10 @@ class ProductCategoryController extends Controller
         ]);
     }
 
-    function updateProductCategory(UpdateProductCategoryRequest $request, $id) {
+    function updateProductCategory(UpdateProductCategoryRequest $request)
+    {
+        $id = $request->input('productCategoryId');
+
         // Busca por id
         $productCategory = ProductCategory::where('productCategoryId', $id)->first();
 
@@ -81,29 +89,32 @@ class ProductCategoryController extends Controller
             'code' => 200,
             'message' => '✅ Datos cargados correctamente',
             'data' => $productCategory
-        ]);          
+        ]);
     }
 
-    function deleteProductCategory($id) {
-                // Busca por id
-                $productCategory = ProductCategory::where('productCategoryId', $id)->first();
+    function deleteProductCategory(Request $request)
+    {
+        $id = $request->input('productCategoryId');
 
-                // Si el id no existe, devuelve error
-                if (!$productCategory) {
-                    return response()->json([
-                        'status' => 'error',
-                        'code' => 404,
-                        'message' => '⚠️ Categoría de producto no encontrada: ' . $id
-                    ], 404);
-                }
-        
-                $productCategory->delete($id);
-        
-                return response()->json([
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => '✅ Categoría de producto eliminada correctamente',
-                    'data' => $productCategory
-                ]);   
+        // Busca por id
+        $productCategory = ProductCategory::where('productCategoryId', $id)->first();
+
+        // Si el id no existe, devuelve error
+        if (!$productCategory) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => '⚠️ Categoría de producto no encontrada: ' . $id
+            ], 404);
+        }
+
+        $productCategory->delete($id);
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => '✅ Categoría de producto eliminada correctamente',
+            'data' => $productCategory
+        ]);
     }
 }

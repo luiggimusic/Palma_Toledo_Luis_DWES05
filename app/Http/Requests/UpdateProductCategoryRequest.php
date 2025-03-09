@@ -26,7 +26,7 @@ class UpdateProductCategoryRequest extends FormRequest
     {
         return [
             'productCategoryId.required' => '⚠️ El ID de categoría es obligatorio.',
-            'productCategoryId.unique' => '⚠️ El ID de categoría ya está registrado.',
+            // 'productCategoryId.unique' => '⚠️ El ID de categoría ya está registrado.',
             'productCategoryName.required' => '⚠️ El nombre de la categoría de producto es obligatorio.',
         ];
     }
