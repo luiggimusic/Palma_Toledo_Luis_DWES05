@@ -12,7 +12,7 @@ use App\utils\ApiResponse;
 
 class UserController extends Controller
 {
-    public function getAllUsers()
+    function getAllUsers()
     {
         $users = User::all();
 
@@ -27,7 +27,7 @@ class UserController extends Controller
         return response()->json([
             'status' => 'success',
             'code' => 200,
-            'message' => 'Datos cargados correctamente',
+            'message' => '✅ Datos cargados correctamente',
             'data' => $users
         ]);
     }
@@ -49,7 +49,7 @@ class UserController extends Controller
         return response()->json([
             'status' => 'success',
             'code' => 200,
-            'message' => 'Datos cargados correctamente',
+            'message' => '✅ Datos cargados correctamente',
             'data' => $users
         ]);
     }
@@ -86,10 +86,11 @@ class UserController extends Controller
         return response()->json([
             'status' => 'success',
             'code' => 200,
-            'message' => '✅ Usuario actualizado correctamente',
+            'message' => '✅ Datos cargados correctamente',
             'data' => $user
         ]);
     }
+
     function deleteUser(Request $request, $dni)
     {
         // Busca el usuario por DNI

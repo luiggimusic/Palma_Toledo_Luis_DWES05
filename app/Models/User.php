@@ -26,14 +26,11 @@ class User extends Model
     //como había definido el dni como primary key, en la respuesta del JSON me mostraba el id en lugar del dni; 
     //sin embargo en la base de datos lo hacía bien
 
-
     public function getRouteKeyName()
     {
         return 'dni';  // Indica que Laravel debe buscar por el campo "dni"
     }
     
-
-
     // Mutador para convertir departmentId a mayúsculas
     public function setDepartmentIdAttribute($value)
     {
@@ -51,5 +48,4 @@ class User extends Model
     {
         $this->attributes['surname'] = ucwords(strtolower($value));
     }
-
 }
