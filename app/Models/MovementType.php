@@ -28,13 +28,13 @@ class MovementType extends Model
     }
     
     // Mutador para convertir a mayúsculas
-    public function setDepartmentIdAttribute($value)
+    public function setMovementTypeIdAttribute($value)
     {
         $this->attributes['movementTypeId'] = strtoupper($value);
     }
 
     // Mutador para capitalizar el nombre
-    public function setDepartmentNameAttribute($value)
+    public function setMovementTypeNameAttribute($value)
     {
         $this->attributes['movementTypeName'] = ucwords(strtolower($value));
     }
