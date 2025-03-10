@@ -37,7 +37,7 @@ class StoreUserRequest extends FormRequest
             'surname' => 'required',
             'dni' => ['required',new ValidDNI(),'unique:users,dni'],
             'dateOfBirth' => 'required|date',
-            'departmentId' => ['required','string','exists:departments,departmentId']
+            'departmentId' => ['required','exists:departments,departmentId']
         ];
     }
 

@@ -12,9 +12,9 @@ class DepartmentController extends Controller
 {
     function getAllDepartments()
     {
-        $department = Department::all();
+        $departments = Department::all();
 
-        if ($department->isEmpty()) {
+        if ($departments->isEmpty()) {
             return response()->json([
                 'status' => 'error',
                 'code' => 404,
@@ -26,7 +26,7 @@ class DepartmentController extends Controller
             'status' => 'success',
             'code' => 200,
             'message' => '✅ Datos cargados correctamente',
-            'data' => $department
+            'data' => $departments
         ]);
     }
 

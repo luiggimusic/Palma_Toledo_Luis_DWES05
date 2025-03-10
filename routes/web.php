@@ -50,4 +50,16 @@ Route::put('movementType/update','App\Http\Controllers\MovementTypeController@up
 Route::delete('movementType/delete','App\Http\Controllers\MovementTypeController@deleteMovementType')
 ->name('deleteMovementType_ruta');
 
+// Product
+Route::get('product/get','App\Http\Controllers\ProductController@getAllProducts')
+->name('ProductGet_ruta');
+Route::get('product/getId','App\Http\Controllers\ProductController@getProductById')
+->name('productGetId_ruta');
+Route::post('product/create','App\Http\Controllers\ProductController@createProduct')
+->name('createProduct_ruta');
+Route::put('product/update','App\Http\Controllers\ProductController@updateProduct')
+->name('updateProduct_ruta');
+Route::delete('product/delete','App\Http\Controllers\ProductController@deleteProduct')
+->name('deleteProduct_ruta');
+
 
