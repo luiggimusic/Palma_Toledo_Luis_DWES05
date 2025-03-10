@@ -62,4 +62,17 @@ Route::put('product/update','App\Http\Controllers\ProductController@updateProduc
 Route::delete('product/delete','App\Http\Controllers\ProductController@deleteProduct')
 ->name('deleteProduct_ruta');
 
+// Movement
+Route::get('movement/get','App\Http\Controllers\MovementController@getAllMovements')
+->name('MovementGet_ruta');
+Route::get('movement/filtered','App\Http\Controllers\MovementController@getMovementFiltered')
+->name('movementGetFiltered_ruta');
+Route::post('movement/sale','App\Http\Controllers\MovementController@sale')
+->name('sale_ruta');
+Route::post('movement/purchase','App\Http\Controllers\MovementController@purchase')
+->name('purchase_ruta');
+Route::post('movement/inventoryTransfer','App\Http\Controllers\MovementController@inventoryTransfer')
+->name('inventoryTransfer_ruta');
+
+
 
