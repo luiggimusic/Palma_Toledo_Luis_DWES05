@@ -65,7 +65,7 @@ Route::delete('product/delete','App\Http\Controllers\ProductController@deletePro
 // Movement
 Route::get('movement/get','App\Http\Controllers\MovementController@getAllMovements')
 ->name('MovementGet_ruta');
-Route::get('movement/filtered','App\Http\Controllers\MovementController@getMovementFiltered')
+Route::get('movement/get/filtered','App\Http\Controllers\MovementController@getMovementFiltered')
 ->name('movementGetFiltered_ruta');
 Route::post('movement/sale','App\Http\Controllers\MovementController@sale')
 ->name('sale_ruta');
