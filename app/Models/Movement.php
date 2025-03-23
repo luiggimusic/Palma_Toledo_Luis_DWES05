@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Movement extends Model
 {
@@ -21,9 +22,6 @@ class Movement extends Model
 
     // Especifico el nombre de la tabla
     protected $table = 'movements';
-
-    // Especifico la clave primaria'
-    // protected $primaryKey = '';
 
     // Desactivo los timestamps si no se usa
     public $timestamps = false;
@@ -46,10 +44,10 @@ class Movement extends Model
     public $incrementing = false;   // Esto indica que no uso un campo autoincrementable.
     //Permite usar una primary key distinta de id
 
-    public function getRouteKeyName()
-    {
-        return 'departmentId';  // Indica que Laravel debe por qué campo buscar
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'departmentId';  // Indica que Laravel debe por qué campo buscar
+    // }
 
     // Mutador para convertir a mayúsculas
     // public function setDepartmentIdAttribute($value)
@@ -61,5 +59,19 @@ class Movement extends Model
     // public function setDepartmentNameAttribute($value)
     // {
     //     $this->attributes['departmentName'] = ucwords(strtolower($value));
+    // }
+
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::created(function ($movement) {
+    //         // Verifica si el tipo de movimiento es "sa" (sale)
+    //         if ($movement->movementTypeId === 'sa') {
+    //             Inventory::where('productCode', $movement->productCode)
+    //                 ->decrement('stock', $movement->quantity);
+    //         }
+    //     });
+
     // }
 }
