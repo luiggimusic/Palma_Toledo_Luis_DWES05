@@ -6,17 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-
-    // Relación con la tabla 'categorias'
-    public function movement()
-    {
-        return $this->belongsTo(Movement::class);
-    }
-
-
-
-
-
     // Especifico el nombre de la tabla
     protected $table = 'products';
 

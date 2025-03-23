@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Movement;
+use App\Http\Resources\MovementResource;
 use App\Http\Requests\StoreMovementRequest;
 
 use function PHPUnit\Framework\isEmpty;
@@ -13,9 +14,13 @@ class MovementController extends Controller
 {
     function getAllMovements()
     {
-        $movements = Movement::all();
+        // Relaciono los movimientos con las clases Product y MovementType para mostrar en la respuesta
+        // los datos relacionados, por ejemplo productName y movementTypeName
+        // Para esto he creado el recurso MovementResource en el que he definido el formato de la respuesta JSON
+        $movements = Movement::with(['product', 'movementType'])->get();
+        $response = MovementResource::collection($movements);
 
-        if ($movements->isEmpty()) {
+        if ($response->isEmpty()) {
             return response()->json([
                 'status' => 'error',
                 'code' => 404,
@@ -27,16 +32,19 @@ class MovementController extends Controller
             'status' => 'success',
             'code' => 200,
             'message' => '✅ Datos cargados correctamente',
-            'data' => $movements
+            'data' => $response
         ]);
     }
     function getMovementFiltered(Request $request)
     {
+        $query = Movement::query()->with(['product', 'movementType']);
 
-
-
-
-        $query = Movement::query();
+        // Filtra por productName si se proporciona
+        if ($request->has('productName') && $request->productName != '') {
+            $query->whereHas('product', function ($q) use ($request) {
+                $q->where('productName', 'LIKE', '%' . $request->productName . '%');
+            });
+        }
 
         // Filtra por productCode si se proporciona
         if ($request->has('productCode') && $request->productCode != '') {
@@ -79,14 +87,11 @@ class MovementController extends Controller
             $query->where('supplier', $request->supplier);
         }
 
-        // // Ejecutar la consulta
-        // $productos = $query->get();
+        $movements = $query->with(['product', 'movementType'])->get();
+        $response = MovementResource::collection($movements);
 
-        
-    // Obtener productos con la relación 'categoria' cargada
-    $movements = $query->with('product')->get();
 
-        if ($productos->isEmpty()) {
+        if ($response->isEmpty()) {
             return response()->json([
                 'status' => 'error',
                 'code' => 404,
@@ -98,7 +103,7 @@ class MovementController extends Controller
             'status' => 'success',
             'code' => 200,
             'message' => '✅ Datos cargados correctamente',
-            'data' => $productos
+            'data' => $response
         ]);
     }
 }

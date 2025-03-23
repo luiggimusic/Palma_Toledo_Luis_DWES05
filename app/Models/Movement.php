@@ -6,10 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movement extends Model
 {
-    // Relación inversa con 'productos'
+
+    // Relación con Product
     public function product()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsTo(Product::class, 'productCode');
+    }
+
+    // Relación con MovementType (si existe)
+    public function movementType()
+    {
+        return $this->belongsTo(MovementType::class, 'movementTypeId');
     }
 
     // Especifico el nombre de la tabla
@@ -22,18 +29,28 @@ class Movement extends Model
     public $timestamps = false;
 
     // Especifico qué atributos son asignables masivamente
-    protected $fillable = ['productCode', 'fromBatchNumber','toBatchNumber','fromLocation','toLocation','quantity',
-'movementTypeId','movementDate','customer','supplier'];
+    protected $fillable = [
+        'productCode',
+        'fromBatchNumber',
+        'toBatchNumber',
+        'fromLocation',
+        'toLocation',
+        'quantity',
+        'movementTypeId',
+        'movementDate',
+        'customer',
+        'supplier'
+    ];
 
     // Como no uso el campo 'id', lo desactivo
     public $incrementing = false;   // Esto indica que no uso un campo autoincrementable.
-                                    //Permite usar una primary key distinta de id
+    //Permite usar una primary key distinta de id
 
     public function getRouteKeyName()
     {
         return 'departmentId';  // Indica que Laravel debe por qué campo buscar
     }
-    
+
     // Mutador para convertir a mayúsculas
     // public function setDepartmentIdAttribute($value)
     // {

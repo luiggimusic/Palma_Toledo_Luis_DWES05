@@ -18,7 +18,7 @@ class MovementTypeController extends Controller
             return response()->json([
                 'status' => 'error',
                 'code' => 404,
-                'message' => '⚠️ No se encontraron departamentos',
+                'message' => '⚠️ No se encontraron tipos de movimiento',
                 'data' => []
             ]);
         }
