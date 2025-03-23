@@ -146,9 +146,10 @@ class MovementController extends Controller
         // Busca el inventario por productCode y batchNumber
         $inventory = Inventory::where('productCode', $request->productCode)->where('batchNumber', $request->toBatchNumber)->first();
 
+        $movement = Movement::create($request->validated());
+        
         // Verifica si hay stock del producto y lote, si no existe, cra una nueva línea
         if (!$inventory) {
-            $movement = Movement::create($request->validated());
 
             $inventory = Inventory::create([
                 'productCode' => $movement->productCode,
@@ -156,26 +157,16 @@ class MovementController extends Controller
                 'location' => $movement->toLocation,
                 'stock' => $movement->quantity,
             ]);
-
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => '✅ Movimiento creado correctamente',
-                'data' => $movement
-            ]);
-        }
-        else {
-            // Si hay  stock, crea el movimiento y actualiza la línea
-            $movement = Movement::create($request->validated());
+        } else {
             // Suma la cantidad al inventario
             $inventory->increment('stock', $movement->quantity);
-
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => '✅ Movimiento creado correctamente',
-                'data' => $movement
-            ]);
         }
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => '✅ Movimiento creado correctamente',
+            'data' => $movement
+        ]);
     }
 }

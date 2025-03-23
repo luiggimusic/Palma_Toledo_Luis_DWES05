@@ -46,9 +46,9 @@ class StorePurchaseRequest extends FormRequest
 
         $this->merge([
             'movementTypeId' => $this->movementTypeId ?? 'PU', // Asigna "PU" de PURCHASE
-            'fromBatchNumber' => $this->toBatchNumber ?? '', // Asigna "" 
-            'fromLocation' => $this->toLocation ?? '', // Asigna "" 
-            'customer' => $this->supplier ?? '', // Asigna "" 
+            'fromBatchNumber' => $this->fromBatchNumber ?? '', // Asigna "" 
+            'fromLocation' => $this->fromLocation ?? '', // Asigna "" 
+            'customer' => $this->customer ?? '', // Asigna "" 
         ]);
     }
 
