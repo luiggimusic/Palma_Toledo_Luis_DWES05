@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
+use App\Http\Requests\DeleteProductCategoryRequest;
 
 class ProductCategoryController extends Controller
 {
@@ -92,21 +93,12 @@ class ProductCategoryController extends Controller
         ]);
     }
 
-    function deleteProductCategory(Request $request)
+    function deleteProductCategory(DeleteProductCategoryRequest $request)
     {
         $id = $request->input('productCategoryId');
 
         // Busca por id
         $productCategory = ProductCategory::where('productCategoryId', $id)->first();
-
-        // Si el id no existe, devuelve error
-        if (!$productCategory) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 404,
-                'message' => '⚠️ Categoría de producto no encontrada: ' . $id
-            ], 404);
-        }
 
         $productCategory->delete($id);
 

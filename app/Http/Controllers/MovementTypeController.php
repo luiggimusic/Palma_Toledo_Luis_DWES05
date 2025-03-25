@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\MovementType;
 use App\Http\Requests\StoreMovementTypeRequest;
 use App\Http\Requests\UpdateMovementTypeRequest;
+use App\Http\Requests\DeleteMovementTypeRequest;
 
 class MovementTypeController extends Controller
 {
@@ -90,20 +91,11 @@ class MovementTypeController extends Controller
             'data' => $movementType
         ]);
     }
-    function deleteMovementType(Request $request) {
+    function deleteMovementType(DeleteMovementTypeRequest $request) {
         $id = $request->input('movementTypeId');
 
         // Busca por id
         $movementType = MovementType::where('movementTypeId', $id)->first();
-
-        // Si el id no existe, devuelve error
-        if (!$movementType) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 404,
-                'message' => '⚠️ Tipo de movimiento no encontrado: ' . $id
-            ], 404);
-        }
 
         $movementType->delete($id);
 

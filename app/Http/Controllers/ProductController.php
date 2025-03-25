@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\DeleteProductRequest;
 
 class ProductController extends Controller
 {
@@ -92,20 +93,11 @@ class ProductController extends Controller
         ]);
     }
 
-    function deleteProduct(Request $request)
+    function deleteProduct(DeleteProductRequest $request)
     {
         $id = $request->input('productCode');
 
         $product = Product::where('productCode',$id)->first();
-
-        // Si el id no existe, devuelve error
-        if (!$product) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 404,
-                'message' => '⚠️ Producto no encontrado: ' . $id
-            ], 404);
-        }
 
         $product->delete($id);
 
