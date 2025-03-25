@@ -45,7 +45,7 @@ class StoreInventoryTransferRequest extends FormRequest
         }
 
         $this->merge([
-            'movementTypeId' => $this->movementTypeId ?? 'TR', // Asigna "SA" de SALE
+            'movementTypeId' => $this->movementTypeId ?? 'TR', // Asigna "TR" de SALE
             'customer' => $this->customer ?? '', // Asigna "" 
             'supplier' => $this->supplier ?? '', // Asigna "" 
         ]);

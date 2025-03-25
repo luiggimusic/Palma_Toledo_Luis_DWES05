@@ -8,8 +8,8 @@ use App\Models\Movement;
 use App\Http\Resources\MovementResource;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\StorePurchaseRequest;
+use App\Http\Requests\StoreInventoryTransferRequest;
 use App\Models\Inventory;
-
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -112,10 +112,12 @@ class MovementController extends Controller
 
     function sale(StoreSaleRequest $request)
     {
-        // Busca el inventario por productCode
-        $inventory = Inventory::where('productCode', $request->productCode)->first();
+        // Busca en el inventario por productCode, batchNumber y location
+        $inventory = Inventory::where('productCode', $request->productCode)
+            ->where('batchNumber', $request->fromBatchNumber)
+            ->where('location', $request->fromLocation)->first();
 
-        // Verificar si hay suficiente stock
+        // Verifica si hay suficiente stock
         if (!$inventory || $inventory->stock < $request->quantity) {
             return response()->json([
                 'status' => 'error',
@@ -142,14 +144,15 @@ class MovementController extends Controller
     }
     function purchase(StorePurchaseRequest $request)
     {
-        // Busca el inventario por productCode y batchNumber
-        $inventory = Inventory::where('productCode', $request->productCode)->where('batchNumber', $request->toBatchNumber)->first();
+        // Busca en el inventario por productCode, batchNumber y location
+        $inventory = Inventory::where('productCode', $request->productCode)
+            ->where('batchNumber', $request->toBatchNumber)
+            ->where('location', $request->toLocation)->first();
 
         $movement = Movement::create($request->validated());
-        
-        // Verifica si hay stock del producto y lote, si no existe, cra una nueva línea
-        if (!$inventory) {
 
+        // Verifica si hay stock del producto y lote, si no existe, crea una nueva línea
+        if (!$inventory) {
             $inventory = Inventory::create([
                 'productCode' => $movement->productCode,
                 'batchNumber' => $movement->toBatchNumber,
@@ -169,32 +172,56 @@ class MovementController extends Controller
         ]);
     }
 
-    function inventoryTransfer(StorePurchaseRequest $request)
+    function inventoryTransfer(StoreInventoryTransferRequest $request)
     {
-        // Busca el inventario por productCode y batchNumber
-        $inventory = Inventory::where('productCode', $request->productCode)->where('batchNumber', $request->toBatchNumber)->first();
+        // ****** STOCK DE ORIGEN ****** //
+        // Busca en el inventario por productCode, batchNumber y location
+        $stockOrigen = Inventory::where('productCode', $request->productCode)
+            ->where('batchNumber', $request->fromBatchNumber)
+            ->where('location', $request->fromLocation)->first();
 
-        $movement = Movement::create($request->validated());
-        
-        // Verifica si hay stock del producto y lote, si no existe, cra una nueva línea
-        if (!$inventory) {
-
-            $inventory = Inventory::create([
-                'productCode' => $movement->productCode,
-                'batchNumber' => $movement->toBatchNumber,
-                'location' => $movement->toLocation,
-                'stock' => $movement->quantity,
-            ]);
+        // Verifica si hay suficiente stock
+        if (!$stockOrigen || $stockOrigen->stock < $request->quantity) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 400,
+                'message' => "⚠️ No hay suficiente stock para este movimiento.",
+                'data' => []
+            ], 400);
         } else {
-            // Suma la cantidad al inventario
-            $inventory->increment('stock', $movement->quantity);
-        }
+            // Si hay suficiente stock, crea el movimiento
+            $movement = Movement::create($request->validated());
+            // Resta la cantidad del inventario
+            $stockOrigen->decrement('stock', $movement->quantity);
+            // Si el stock llega a 0, elimina el registro de inventario
+            if ($stockOrigen->stock <= 0) {
+                $stockOrigen->delete();
+            }
 
-        return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'message' => '✅ Movimiento creado correctamente',
-            'data' => $movement
-        ]);
+            // ****** STOCK DE DESTINO ****** //
+            // Verifica si hay stock del producto y lote, si no existe, crea una nueva línea
+            $stockDestino = Inventory::where('productCode', $request->productCode)
+                ->where('batchNumber', $request->toBatchNumber)
+                ->where('location', $request->toLocation)->first();
+
+            if (!$stockDestino) {
+                $stockDestino = Inventory::create([
+                    'productCode' => $movement->productCode,
+                    'batchNumber' => $movement->toBatchNumber,
+                    'location' => $movement->toLocation,
+                    'stock' => $movement->quantity,
+                ]);
+            } else {
+                // Suma la cantidad al inventario
+                $stockDestino->increment('stock', $movement->quantity);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => '✅ Movimiento creado correctamente',
+                'data' => $movement
+            ]);
+        }
     }
 }
